@@ -1,0 +1,33 @@
+<div class="fixed w-48 left-0 top-0 bottom-0">
+  <div class="m-2 h-12">
+  </div>
+  <span class="m-2 text-slate-200 font-bold">
+    <span class="text-slate-300">#</span><span class="text-green-400">[</span>LentoApi<span class="text-green-400">]</span>
+  </span>
+  <hr class="m-2" />
+  <span class="m-2 text-slate-200 font-bold">
+    <span class="text-blue-400">{{ '{' }}</span>LentoDoc<span class="text-blue-400">{{ '}' }}</span>
+  </span>
+  <hr class="m-2" />
+  <span class="m-2 text-slate-200 font-bold">
+    <span class="text-red-400">/</span>LentoBot
+  </span>
+</div>
+
+<div class="fixed z-20 left-48 top-0 right-0 h-12 p-2 bg-slate-600">
+  <ul class="flex flex-row content-center [&>*:last-child]:after:hidden">
+
+    <li class="text-slate-50 after:content-['>'] after:ml-0.5 after:mr-0.5 after:text-xs after:font-bold">
+      <a href="level.Item2" class="text-xs font-bold">level.Item2</a>
+    </li>
+    <li class="text-slate-50 after:content-['>'] after:ml-0.5 after:mr-0.5 after:text-xs after:font-bold">
+      <a href="level.Item2" class="text-xs font-bold">level.Item3</a>
+    </li>
+  </ul>
+</div>
+
+<div class="ml-48 mt-10 p-2 pb-0">
+
+  <router-outlet />
+  <openapi-viewer spec="https://petstore3.swagger.io/api/v3/openapi.json"></openapi-viewer>
+</div>
