@@ -1,3 +1,10 @@
-    <div *ngIf="loading" class="italic text-gray-400">Loading…</div>
-    <div *ngIf="error" class="text-red-500">Error: {{error}}</div>
-    <article *ngIf="markdown" [innerHTML]="rendered"></article>
+<div *ngIf="loading" class="italic text-gray-400">Loading…</div>
+<div *ngIf="error" class="text-red-500">Error: {{error}}</div>
+<div *ngIf="markdown">
+    <remark [markdown]="markdown">
+        <ng-template remarkTemplate="heading" let-node>
+            <h1 *ngIf="node.depth === 1" [remarkNode]="node" class="font-bold"></h1>
+            <h2 *ngIf="node.depth === 2" [remarkNode]="node"></h2>
+        </ng-template>
+    </remark>
+</div>

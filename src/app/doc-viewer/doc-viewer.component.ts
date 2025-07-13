@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RemarkModule } from 'ngx-remark';
 
 @Component({
   selector: 'docviewer',
-  imports: [CommonModule],
+  imports: [CommonModule, RemarkModule],
   templateUrl: './doc-viewer.component.html',
   styleUrl: './doc-viewer.component.scss',
   standalone: true
@@ -12,7 +13,6 @@ import { ActivatedRoute } from '@angular/router';
 export class DocViewerComponent implements OnInit {
   loading = true;
   markdown: string = '';
-  rendered: string = '';
   error: string | null = null;
 
   constructor(private route: ActivatedRoute) {}
@@ -22,8 +22,6 @@ export class DocViewerComponent implements OnInit {
       this.loading = true;
       this.error = null;
       this.markdown = '';
-      this.rendered = '';
-
       const repo = params.get('repo');
       const slug = params.get('slug');
       if (!repo || !slug) {
@@ -39,8 +37,6 @@ export class DocViewerComponent implements OnInit {
         const res = await fetch(url);
         if (!res.ok) throw new Error('Document not found');
         this.markdown = await res.text();
-        // Render markdown—replace with your real Markdown renderer!
-        this.rendered = this.basicMarkdownToHtml(this.markdown);
       } catch (e: any) {
         this.error = e.message || 'Could not load doc';
       } finally {
