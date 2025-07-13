@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { LentoDocComponent } from '../components/lentodoc.component';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { SearchService } from '../services/search.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LentoDocComponent, CommonModule],
+  imports: [RouterOutlet, CommonModule, RouterModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   schemas: [

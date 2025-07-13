@@ -1,7 +1,7 @@
 <div class="fixed w-48 left-0 top-0 bottom-0">
   <div class="m-2 h-12">
   </div>
-  <span class="m-2 text-slate-200 font-bold">
+  <!--<span class="m-2 text-slate-200 font-bold">
     <span class="text-slate-300">#</span><span class="text-green-400">[</span>LentoApi<span
       class="text-green-400">]</span>
   </span>
@@ -12,15 +12,24 @@
   <hr class="m-2" />
   <span class="m-2 text-slate-200 font-bold">
     <span class="text-red-400">/</span>LentoBot
-  </span>
+  </span>-->
 </div>
 
-<div class="fixed z-20 left-48 top-0 right-0 h-12 p-2 bg-slate-600">
-  <span *ngFor="let item of searchService.indexDocs" [innerHTML]="item.doc.formattedTitle || item.doc.title"></span>
+<div class="fixed z-20 left-48 top-0 right-0 h-12 p-2 bg-slate-600 text-slate-200 font-bold text-xl flex justify-end">
+  <!--<span class="m-2">
+    <span class="text-amber-300">Re</span>Sonaris
+  </span>-->
+
+  @for (item of searchService.indexDocs; track item.repo) {
+    <div class="ml-6 px-2" [routerLinkActive]="['text-slate-700', 'bg-slate-200', 'rounded-md']">
+      <a [routerLink]="['/docs', item.repo, item.doc.slug]"
+        [innerHTML]="item.doc.formattedTitle || item.doc.title">
+      </a>
+    </div>
+  }
 </div>
 
-<div class="ml-48 mt-10 p-2 pb-0">
-
+<div class="ml-48 mt-12 mb-2 mr-2 p-2 rounded-md bg-white">
   <router-outlet />
-  <openapi-viewer spec="https://petstore3.swagger.io/api/v3/openapi.json"></openapi-viewer>
+  <!--<openapi-viewer spec="https://raw.githubusercontent.com/OAI/learn.openapis.org/refs/heads/main/examples/v3.0/api-with-examples.json"></openapi-viewer>-->
 </div>

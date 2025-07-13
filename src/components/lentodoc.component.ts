@@ -38,13 +38,6 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [`
-    .openapi-error { color: red; font-weight: bold; }
-    :host { font-family: ui-sans-serif, sans-serif; display: block; background: #fafafa; border: 1px solid #eee; padding: 1rem; border-radius: 8px; }
-    h1, h2 { margin-top: 1rem; }
-    ul { margin: 0; padding-left: 1.2rem; }
-    pre { background: #f7f7f7; padding: 0.5rem; border-radius: 6px; }
-  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LentoDocComponent {

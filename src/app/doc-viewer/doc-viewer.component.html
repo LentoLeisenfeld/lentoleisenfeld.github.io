@@ -1,0 +1,3 @@
+    <div *ngIf="loading" class="italic text-gray-400">Loading…</div>
+    <div *ngIf="error" class="text-red-500">Error: {{error}}</div>
+    <article *ngIf="markdown" [innerHTML]="rendered"></article>
