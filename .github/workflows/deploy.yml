@@ -27,6 +27,9 @@ jobs:
     - name: Add CNAME for custom domain
       run: echo 'leisenfeld.com' > dist/website/browser/CNAME
 
+    - name: Copy index.html to 404.html for Angular SPA fallback
+      run: cp dist/website/browser/index.html dist/website/browser/404.html
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
