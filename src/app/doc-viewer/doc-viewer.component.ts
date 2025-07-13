@@ -13,6 +13,7 @@ import { RemarkModule } from 'ngx-remark';
 export class DocViewerComponent implements OnInit {
   loading = true;
   markdown: string = '';
+  metadata: any = {};
   error: string | null = null;
 
   constructor(private route: ActivatedRoute) {}
@@ -22,6 +23,7 @@ export class DocViewerComponent implements OnInit {
       this.loading = true;
       this.error = null;
       this.markdown = '';
+      this.metadata = {};
       const repo = params.get('repo');
       const slug = params.get('slug');
       if (!repo || !slug) {
@@ -30,28 +32,30 @@ export class DocViewerComponent implements OnInit {
         return;
       }
 
-      // Build the .md file URL—customize this for your hosting structure!
       const url = `https://leisenfeld.com/${repo}/${slug}.md`;
 
       try {
         const res = await fetch(url);
         if (!res.ok) throw new Error('Document not found');
-        this.markdown = await res.text();
+        let md = await res.text();
+
+        // --- Extract JSON frontmatter ---
+        const match = md.match(/^---\s*\n([\s\S]+?)\n---\s*\n?/);
+        if (match) {
+          try {
+            this.metadata = JSON.parse(match[1]);
+          } catch (e) {
+            this.metadata = {};
+          }
+          md = md.slice(match[0].length); // Remove frontmatter block from md
+        }
+        this.markdown = md.trim();
+
       } catch (e: any) {
         this.error = e.message || 'Could not load doc';
       } finally {
         this.loading = false;
       }
     });
-  }
-
-  // **Replace this with your real markdown renderer!**
-  basicMarkdownToHtml(md: string): string {
-    // Super-basic: convert # headers and linebreaks (not production-ready!)
-    return md
-      .replace(/^### (.*)$/gm, '<h3>$1</h3>')
-      .replace(/^## (.*)$/gm, '<h2>$1</h2>')
-      .replace(/^# (.*)$/gm, '<h1>$1</h1>')
-      .replace(/\n/g, '<br>');
   }
 }
