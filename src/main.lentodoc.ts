@@ -6,5 +6,5 @@ bootstrapApplication(LentoDocComponent)
   .then(ref => {
     const injector = ref.injector;
     const el = createCustomElement(LentoDocComponent, { injector });
-    customElements.define('openapi-viewer', el);
+    customElements.define('lentodoc', el);
   });

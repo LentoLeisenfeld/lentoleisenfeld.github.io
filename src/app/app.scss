@@ -1,0 +1,7 @@
+@media (min-width: 48rem) {
+  main,
+  header {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+  }
+}

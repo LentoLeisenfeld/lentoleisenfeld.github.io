@@ -1,35 +1,50 @@
-<div class="fixed w-48 left-0 top-0 bottom-0">
-  <div class="m-2 h-12">
+<aside class="hidden md:fixed md:left-0 md:top-0 md:h-full md:w-[250px] md:bg-gray-800 md:text-white md:flex md:flex-col z-40">
+  <ng-container *ngTemplateOutlet="sidebar"></ng-container>
+</aside>
+
+<ng-container *ngIf="sidebarOpen">
+  <div class="fixed inset-0 bg-slate-500/40 z-40" (click)="closeSidebar()"></div>
+  <aside class="fixed left-0 top-0 h-full w-[250px] bg-gray-800 text-white z-50 shadow-lg transform transition-transform duration-300 translate-x-0 flex flex-col">
+    <ng-container *ngTemplateOutlet="sidebar"></ng-container>
+  </aside>
+</ng-container>
+
+<ng-template #sidebar>
+  <div class="flex-1 p-4">
+    <h2 class="text-xl font-bold mb-4">Leisenfeld.com</h2>
+    <ul>
+      <li class="mb-2">Menu Item 1</li>
+      <li class="mb-2">Menu Item 2</li>
+      <li class="mb-2">Menu Item 3</li>
+    </ul>
   </div>
-  <!--<span class="m-2 text-slate-200 font-bold">
-    <span class="text-slate-300">#</span><span class="text-green-400">[</span>LentoApi<span
-      class="text-green-400">]</span>
-  </span>
-  <hr class="m-2" />
-  <span class="m-2 text-slate-200 font-bold">
-    <span class="text-blue-400">{{ '{' }}</span>LentoDoc<span class="text-blue-400">{{ '}' }}</span>
-  </span>
-  <hr class="m-2" />
-  <span class="m-2 text-slate-200 font-bold">
-    <span class="text-red-400">/</span>LentoBot
-  </span>-->
-</div>
+  <input type="text"/>
+</ng-template>
 
-<div class="fixed z-20 left-48 top-0 right-0 h-12 p-2 bg-slate-600 text-slate-200 font-bold text-xl flex justify-end">
-  <!--<span class="m-2">
-    <span class="text-amber-300">Re</span>Sonaris
-  </span>-->
+<header class="fixed min-w-lg top-0 left-0 w-full h-12 bg-slate-200 shadow z-30 flex items-center px-6 shadow-md">
+  <button
+    class="md:hidden mr-3 text-gray-700 focus:outline-none"
+    (click)="openSidebar()"
+    aria-label="Open sidebar"
+  >
+    <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h20M4 14h20M4 21h20"/>
+    </svg>
+  </button>
+  <div class="flex-1 flex gap-4 justify-end">
+    @for (item of searchService.indexDocs; track item.repo) {
+      <div class="px-4 font-bold rounded-md" [routerLinkActive]="['text-slate-200', 'bg-slate-500']">
+        <a [routerLink]="['/docs', item.repo, item.doc.slug]"
+          [innerHTML]="item.doc.formattedTitle || item.doc.title">
+        </a>
+      </div>
+    }
+  </div>
+</header>
 
-  @for (item of searchService.indexDocs; track item.repo) {
-    <div class="ml-6 px-2" [routerLinkActive]="['text-slate-700', 'bg-slate-200', 'rounded-md']">
-      <a [routerLink]="['/docs', item.repo, item.doc.slug]"
-        [innerHTML]="item.doc.formattedTitle || item.doc.title">
-      </a>
-    </div>
-  }
-</div>
-
-<div class="ml-48 mt-12 mb-2 mr-2 p-2 rounded-md bg-white">
-  <router-outlet />
-  <!--<openapi-viewer spec="https://raw.githubusercontent.com/OAI/learn.openapis.org/refs/heads/main/examples/v3.0/api-with-examples.json"></openapi-viewer>-->
-</div>
+<main class="pt-12 px-6 min-w-lg overflow-y-auto content-center">
+  <div class="max-w-6xl m-6 mx-auto p-4 rounded-md bg-slate-400 shadow-md">
+    <router-outlet />
+    <lentodoc [spec]="this.spec" />
+  </div>
+</main>

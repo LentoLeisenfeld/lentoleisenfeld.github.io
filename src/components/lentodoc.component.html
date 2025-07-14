@@ -1,0 +1,37 @@
+OpenApi Spec Version {{this.spec?.openapi}}
+<br />
+<br />
+=> info
+<br />
+{{this.spec?.info?.title}}
+<br />
+{{this.spec?.info?.description}}
+<br />
+{{this.spec?.info?.version}}
+<br />
+{{this.spec?.info?.termsOfService}}
+<br />
+<br />
+=> info.contact
+<br />
+{{this.spec?.info?.contact?.name}}
+<br />
+{{this.spec?.info?.contact?.email}}
+<br />
+{{this.spec?.info?.contact?.url}}
+<br />
+<br />
+=> info.license
+<br />
+{{this.spec?.info?.license?.name}}
+<br />
+{{this.spec?.info?.license?.url}}
+<br />
+<br />
+=> info.license
+<br />
+{{this.spec?.info?.license?.name}}
+
+<pre>
+{{this.spec | json}}
+</pre>

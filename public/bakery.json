@@ -1,0 +1,579 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bakery API",
+    "description": "A full-featured, easy-to-understand bakery API demo using OpenAPI 3.1.0 specification.",
+    "version": "1.0.0",
+    "termsOfService": "https://bakery.example.com/terms",
+    "contact": {
+      "name": "Bakery API Support",
+      "email": "support@bakery.example.com",
+      "url": "https://bakery.example.com/support"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.bakery.example.com/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "https://sandbox.bakery.example.com/v1",
+      "description": "Sandbox server"
+    }
+  ],
+  "tags": [
+    { "name": "products", "description": "Bakery products" },
+    { "name": "orders", "description": "Manage orders" },
+    { "name": "customers", "description": "Manage customers" }
+  ],
+  "externalDocs": {
+    "description": "Find more info here",
+    "url": "https://bakery.example.com/docs"
+  },
+  "paths": {
+    "/products": {
+      "get": {
+        "tags": ["products"],
+        "summary": "List all products",
+        "description": "Returns a list of all bakery products. Supports filtering by category.",
+        "operationId": "listProducts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/categoryQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A paged array of products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsList"
+                },
+                "examples": {
+                  "sample": {
+                    "summary": "Sample products list",
+                    "value": {
+                      "products": [
+                        {
+                          "id": "br001",
+                          "name": "Baguette",
+                          "category": "bread"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Rate-Limit": {
+                "$ref": "#/components/headers/RateLimit"
+              }
+            },
+            "links": {
+              "productDetails": {
+                "operationId": "getProduct",
+                "parameters": {
+                  "productId": "$response.body#/products/0/id"
+                },
+                "description": "The first product from the list"
+              }
+            }
+          }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      },
+      "post": {
+        "tags": ["products"],
+        "summary": "Create a product",
+        "description": "Add a new bakery product. Only available to admin users.",
+        "operationId": "createProduct",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ProductInput"
+        },
+        "responses": {
+          "201": {
+            "description": "Product created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        },
+        "security": [{ "OAuth2": ["admin"] }]
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Get product details",
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/productIdPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" },
+                    "examples": {
+                        "baguette": {
+                            "value": {
+                                "id": "br001",
+                                "name": "Baguette",
+                                "category": "bread",
+                                "price": 3.5,
+                                "tags": ["artisan", "french"],
+                                "description": "Classic French baguette.",
+                                "available": true
+                            }
+                        }
+                    }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["products"],
+        "summary": "Update a product",
+        "description": "Partially update an existing product.",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/productIdPath"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ProductUpdate"
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Product" }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        },
+        "deprecated": true
+      },
+      "delete": {
+        "tags": ["products"],
+        "summary": "Delete a product",
+        "operationId": "deleteProduct",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/productIdPath"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Product deleted" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        },
+        "security": [{ "OAuth2": ["admin"] }]
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": ["orders"],
+        "summary": "Place an order",
+        "description": "Customers can place an order.",
+        "operationId": "createOrder",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/OrderInput"
+        },
+        "responses": {
+          "201": {
+            "description": "Order placed",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" }
+              }
+            },
+            "links": {
+              "getOrder": {
+                "operationId": "getOrder",
+                "parameters": {
+                  "orderId": "$response.body#/id"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "tags": ["orders"],
+        "summary": "Get order details",
+        "operationId": "getOrder",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/orderIdPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "tags": ["customers"],
+        "summary": "List customers",
+        "operationId": "listCustomers",
+        "responses": {
+          "200": {
+            "description": "List of customers",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CustomersList" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2": ["admin"] }]
+      }
+    },
+    "/customers/{customerId}/orders": {
+      "get": {
+        "tags": ["orders"],
+        "summary": "List customer orders",
+        "operationId": "listCustomerOrders",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/customerIdPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of orders for a customer",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrdersList" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {
+    "orderStatusChanged": {
+      "post": {
+        "summary": "Receive order status updates",
+        "description": "Notifies client when an order status changes.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/OrderStatusChangedEvent" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook received"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "readOnly": true },
+          "name": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["bread", "pastry", "cake", "cookie", "other"]
+          },
+          "price": { "type": "number", "format": "float", "minimum": 0 },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "description": { "type": "string", "nullable": true },
+          "available": { "type": "boolean", "default": true },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true
+          }
+        },
+        "required": ["id", "name", "category", "price"],
+        "examples": [
+          {
+            "id": "ck001",
+            "name": "Chocolate Cake",
+            "category": "cake",
+            "price": 25,
+            "tags": ["chocolate", "birthday"],
+            "description": "Rich chocolate layer cake",
+            "available": true
+          }
+        ]
+      },
+      "ProductsList": {
+        "type": "object",
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Product" }
+          }
+        }
+      },
+      "ProductInput": {
+        "type": "object",
+        "allOf": [
+          { "$ref": "#/components/schemas/Product" },
+          {
+            "required": ["name", "category", "price"],
+            "properties": {
+              "id": { "not": {} }
+            }
+          }
+        ]
+      },
+      "ProductUpdate": {
+        "type": "object",
+        "anyOf": [
+          { "required": ["name"] },
+          { "required": ["price"] },
+          { "required": ["available"] }
+        ],
+        "properties": {
+          "name": { "type": "string" },
+          "category": { "type": "string" },
+          "price": { "type": "number" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "available": { "type": "boolean" }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "readOnly": true },
+          "customerId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/OrderItem" }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "confirmed", "preparing", "ready", "delivered", "cancelled"]
+          },
+          "createdAt": { "type": "string", "format": "date-time", "readOnly": true },
+          "notes": { "type": "string", "nullable": true }
+        },
+        "required": ["id", "customerId", "items", "status", "createdAt"]
+      },
+      "OrdersList": {
+        "type": "object",
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Order" }
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 }
+        },
+        "required": ["productId", "quantity"]
+      },
+      "OrderInput": {
+        "type": "object",
+        "properties": {
+          "customerId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/OrderItem" }
+          },
+          "notes": { "type": "string", "nullable": true }
+        },
+        "required": ["customerId", "items"]
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "readOnly": true },
+          "name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "vip": { "type": "boolean", "default": false }
+        },
+        "required": ["id", "name", "email"]
+      },
+      "CustomersList": {
+        "type": "object",
+        "properties": {
+          "customers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Customer" }
+          }
+        }
+      },
+      "OrderStatusChangedEvent": {
+        "type": "object",
+        "properties": {
+          "orderId": { "type": "string" },
+          "oldStatus": { "type": "string" },
+          "newStatus": { "type": "string" }
+        },
+        "required": ["orderId", "oldStatus", "newStatus"]
+      }
+    },
+    "parameters": {
+      "productIdPath": {
+        "name": "productId",
+        "in": "path",
+        "description": "ID of the product",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "orderIdPath": {
+        "name": "orderId",
+        "in": "path",
+        "description": "ID of the order",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "customerIdPath": {
+        "name": "customerId",
+        "in": "path",
+        "description": "ID of the customer",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "categoryQuery": {
+        "name": "category",
+        "in": "query",
+        "description": "Filter products by category",
+        "schema": {
+          "type": "string",
+          "enum": ["bread", "pastry", "cake", "cookie", "other"]
+        }
+      }
+    },
+    "requestBodies": {
+      "ProductInput": {
+        "description": "New product to add",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ProductInput" }
+          },
+          "application/xml": {
+            "schema": { "$ref": "#/components/schemas/ProductInput" }
+          }
+        },
+        "required": true
+      },
+      "ProductUpdate": {
+        "description": "Fields to update for the product",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ProductUpdate" }
+          }
+        }
+      },
+      "OrderInput": {
+        "description": "Order data",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/OrderInput" }
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "RateLimit": {
+        "description": "Rate limit for the endpoint",
+        "schema": { "type": "integer" }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "name": "X-API-KEY",
+        "in": "header"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://bakery.example.com/oauth/authorize",
+            "tokenUrl": "https://bakery.example.com/oauth/token",
+            "scopes": {
+              "read": "read access",
+              "write": "write access",
+              "admin": "admin access"
+            }
+          }
+        }
+      }
+    }
+  }
+}
