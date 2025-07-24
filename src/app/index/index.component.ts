@@ -2,14 +2,13 @@ import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { SearchService } from '../../services/search.service';
 import { BakeryApiService } from '../../services/bakery.service';
 import { OpenAPIV3_1 } from 'openapi-types';
-import { LentoDocComponent } from '@lento/lentodoc';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-index',
-  imports: [LentoDocComponent, MonacoEditorModule, FormsModule, CommonModule],
+  imports: [MonacoEditorModule, FormsModule, CommonModule],
   templateUrl: './index.component.html',
   styleUrl: './index.component.scss',
   standalone: true,
@@ -58,6 +57,7 @@ class ProductsController
     navigator.clipboard.writeText(this.code2);
   }
   async ngOnInit() {
+    alert();
     this.spec = await this.bakeryApi.getSpec();
     await this.searchService.loadIndex();
     console.log(this.searchService.indexes, this.searchService.indexDocs);
