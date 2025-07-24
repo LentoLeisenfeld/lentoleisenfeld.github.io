@@ -1,0 +1,28 @@
+<div class="flex gap-4 relative p-0 xl:p-16">
+    <div class="hidden xl:block bg-slate-200 absolute top-0 bottom-0 left-0 right-0" style="clip-path: var(--hero-bg);"></div>
+    <div class="relative w-full text-black place-content-center p-4 xl:p-8 rounded shadow-xl xl:shadow-none text-justify bg-slate-300 xl:bg-transparent">
+        <h1 class="text-2xl font-bold">#<span class="text-green-400">[</span>LentoApi<span class="text-green-400">]</span></h1>
+        <br />
+        .. is a lean PHP framework made for developers who care about clean code and a fast setup.<br /><br />
+        Developer-first, attribute-powered, and bundled with docs.<br /><br />
+        It's everything you need, nothing you don't.<br />
+        <br />
+        <div>
+            <button class="bg-blue-500 text-white rounded shadow hover:bg-blue-600 p-1 px-3">Get started!</button>
+        </div>
+    </div>
+    <div class="relative min-w-[65%] rounded-md hidden xl:block bg-slate-400 shadow-xl overflow-hidden">
+        <button class="absolute top-2 right-2 z-10 px-3 py-1 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
+            (click)="copyCode()" type="button">
+            Copy
+        </button>
+        <pre class="p-2">
+            <code [innerHTML]="this.code2">
+            </code>
+        </pre>
+    </div>
+</div>
+
+<p>index-component works!</p>
+
+<lentodoc [spec]="this.spec" />

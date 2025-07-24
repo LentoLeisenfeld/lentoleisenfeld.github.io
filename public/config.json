@@ -1,7 +1,6 @@
 {
   "sources": [
     "https://leisenfeld.com/LentoApi/index.json",
-    "https://leisenfeld.com/LentoDoc/index.json",
-    "https://leisenfeld.com/LentoBot/index.json"
+    "https://leisenfeld.com/LentoDoc/index.json"
   ]
 }

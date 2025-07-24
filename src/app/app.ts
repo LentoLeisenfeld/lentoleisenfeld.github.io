@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { SearchService } from '../services/search.service';
 import { CommonModule } from '@angular/common';
-import { LentoDocComponent } from "../components/lentodoc.component";
 import { OpenAPIV3_1 } from 'openapi-types';
 import { BakeryApiService } from '../services/bakery.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, RouterModule, LentoDocComponent],
+  imports: [RouterOutlet, CommonModule, RouterModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   schemas: [
@@ -16,28 +15,14 @@ import { BakeryApiService } from '../services/bakery.service';
   ]
 })
 export class App implements OnInit {
-  loading = true;
   protected title = 'test';
+  public sidebarOpen = false;
 
-  spec: OpenAPIV3_1.Document | null = null;
-
-  constructor(public searchService: SearchService,
-    private bakeryApi: BakeryApiService
-  ) { }
+  constructor(public searchService: SearchService) { }
 
   async ngOnInit() {
-    try {
-      this.spec = await this.bakeryApi.getSpec();
-      console.log(this.spec);
-    } catch (err) {
-      this.spec = null;
-    }
-
     await this.searchService.loadIndex();
-    this.loading = false;
   }
-
-  sidebarOpen = false;
 
   openSidebar() {
     this.sidebarOpen = true;

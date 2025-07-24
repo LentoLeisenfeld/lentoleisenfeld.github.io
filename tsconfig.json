@@ -13,7 +13,15 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "lento/lentodoc": [
+        "../LentoDoc/projects/lentodoc/src/public-api.ts"
+      ],
+      "lento/lentodoc/*": [
+        "../LentoDoc/projects/lentodoc/src/lib/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

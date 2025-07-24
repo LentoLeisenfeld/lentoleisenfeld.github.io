@@ -1,1 +1,22 @@
 @use "./tailwind.css";
+
+h1 {
+    @apply text-2xl my-2;
+}
+h2 {
+    @apply text-xl my-2;
+}
+p {
+    @apply m-4
+}
+
+@property --hero-bg {
+    syntax: "*";
+    inherits: false;
+    initial-value: polygon(calc(0% + 30px) calc(0% + 50px),
+            45% calc(0% + 120px),
+            calc(100% - 30px) calc(0% + 30px),
+            90% 100%,
+            55% 80%,
+            0% 95%);
+}
