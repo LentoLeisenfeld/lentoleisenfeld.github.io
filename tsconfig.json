@@ -16,10 +16,10 @@
     "module": "preserve",
     "paths": {
       "lento/lentodoc": [
-        "../LentoDoc/projects/lentodoc/src/public-api.ts"
+        "./LentoDoc/projects/lentodoc/src/public-api.ts"
       ],
       "lento/lentodoc/*": [
-        "../LentoDoc/projects/lentodoc/src/lib/*"
+        "./LentoDoc/projects/lentodoc/src/lib/*"
       ]
     }
   },
