@@ -10,8 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out repository
+    - name: Check out main repository
       uses: actions/checkout@v4
+
+    - name: Check out LentoDoc repository
+      uses: actions/checkout@v4
+      with:
+        repository: LentoLeisenfeld/LentoDoc
+        path: ../LentoDoc
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
