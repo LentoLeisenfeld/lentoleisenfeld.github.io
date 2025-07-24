@@ -10,34 +10,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out main repository
-      uses: actions/checkout@v4
+      - name: Check out main repository
+        uses: actions/checkout@v4
+        with:
+          path: lentoleisenfeld.github.io
 
-    - name: Check out LentoDoc repository
-      uses: actions/checkout@v4
-      with:
-        repository: LentoLeisenfeld/LentoDoc
-        path: ../LentoDoc
+      - name: Check out LentoDoc repository
+        uses: actions/checkout@v4
+        with:
+          repository: LentoLeisenfeld/LentoDoc
+          path: LentoDoc
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Symlink LentoDoc for tsconfig
+        run: |
+          ln -s "$GITHUB_WORKSPACE/LentoDoc" "$GITHUB_WORKSPACE/lentoleisenfeld.github.io/../LentoDoc"
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-    - name: Build Angular app
-      run: npx ng build --base-href /
+      - name: Install dependencies
+        run: npm ci
+        working-directory: lentoleisenfeld.github.io
 
-    - name: Add CNAME for custom domain
-      run: echo 'leisenfeld.com' > dist/website/browser/CNAME
+      - name: Build Angular app
+        run: npx ng build --base-href /
+        working-directory: lentoleisenfeld.github.io
 
-    - name: Copy index.html to 404.html for Angular SPA fallback
-      run: cp dist/website/browser/index.html dist/website/browser/404.html
+      - name: Add CNAME for custom domain
+        run: echo 'leisenfeld.com' > dist/website/browser/CNAME
+        working-directory: lentoleisenfeld.github.io
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist/website/browser
+      - name: Copy index.html to 404.html for Angular SPA fallback
+        run: cp dist/website/browser/index.html dist/website/browser/404.html
+        working-directory: lentoleisenfeld.github.io
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: lentoleisenfeld.github.io/dist/website/browser
