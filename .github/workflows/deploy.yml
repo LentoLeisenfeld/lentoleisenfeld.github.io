@@ -21,15 +21,20 @@ jobs:
           repository: LentoLeisenfeld/LentoDoc
           path: LentoDoc
 
-      - name: Symlink LentoDoc for tsconfig (and debug)
+      - name: Install dependencies
+        run: npm ci
+        working-directory: LentoDoc
+
+      - name: Build LentoDoc library
+        run: npx ng build lentodoc
+        working-directory: LentoDoc
+
+      - name: Symlink built LentoDoc to node_modules/lento/lentodoc
         run: |
-          ln -s "$GITHUB_WORKSPACE/LentoDoc" "$GITHUB_WORKSPACE/lentoleisenfeld.github.io/../LentoDoc"
-          echo "---- TREE ----"
-          tree -L 4 $GITHUB_WORKSPACE
-          echo "---- LENTO DOC API ----"
-          ls -l $GITHUB_WORKSPACE/LentoDoc/projects/lentodoc/src/public-api.ts
-          echo "---- LENTO DOC LINK ----"
-          ls -l $GITHUB_WORKSPACE/lentoleisenfeld.github.io/../LentoDoc/projects/lentodoc/src/public-api.ts
+          mkdir -p node_modules/lento
+          ln -s $GITHUB_WORKSPACE/LentoDoc/dist/lentodoc node_modules/lento/lentodoc
+          ls -l node_modules/lento/
+        working-directory: lentoleisenfeld.github.io
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -41,12 +46,7 @@ jobs:
         working-directory: lentoleisenfeld.github.io
 
       - name: Build Angular app
-        run: |
-          echo "---- DEBUG: tsconfig used ----"
-          cat tsconfig.json
-          cat tsconfig.app.json || true
-          echo "---- END DEBUG ----"
-          npx ng build --base-href /
+        run: npx ng build --base-href /
         working-directory: lentoleisenfeld.github.io
 
       - name: Add CNAME for custom domain

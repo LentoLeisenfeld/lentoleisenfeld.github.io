@@ -2,7 +2,7 @@ import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { SearchService } from '../../services/search.service';
 import { BakeryApiService } from '../../services/bakery.service';
 import { OpenAPIV3_1 } from 'openapi-types';
-import { LentoDocComponent } from 'lento/lentodoc';
+import { LentoDocComponent } from '@lento/lentodoc';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

@@ -30,6 +30,7 @@
     "@ngstack/code-editor": "^9.0.0",
     "@tailwindcss/postcss": "^4.1.11",
     "katex": "^0.16.22",
+    "@lento/lentodoc": "file:../LentoDoc/dist/lentodoc",
     "monaco-editor": "^0.52.2",
     "ngx-monaco-editor-v2": "20.0.0",
     "ngx-remark": "^0.1.5",
