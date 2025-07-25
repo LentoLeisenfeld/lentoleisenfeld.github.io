@@ -8,7 +8,6 @@ import { OpenAPIV3_1 } from 'openapi-types';
   templateUrl: './lentodoc.component.html',
   styleUrl: './lentodoc.component.scss',
   imports: [CommonModule, FormsModule],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LentoDocComponent {

@@ -2,7 +2,7 @@ import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { SearchService } from '@services/search.service';
 import { BakeryApiService } from '@services/bakery.service';
 import { OpenAPIV3_1 } from 'openapi-types';
-import { LentoDocComponent } from '@lentodoc/src/public-api';
+import { LentoDocComponent } from '@lentodoc/src/lib/lentodoc.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 

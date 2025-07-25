@@ -10,7 +10,14 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "ngx-build-plus:browser",
+          "options": {
+            "outputPath": "dist/lentodoc",
+            "index": "src/index.html",
+            "main": "projects/lentodoc/src/main.ts",
+            "polyfills": "projects/lentodoc/src/polyfills.ts",
+            "tsConfig": "tsconfig.lib.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/lentodoc/tsconfig.lib.prod.json"
